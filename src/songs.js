@@ -25,28 +25,62 @@ function orderAlphabetically(array) {
 }
 
 //Exercise 4: Order by year, ascending
-function orderByYear() {
-  const sortedYear = array
-    .map((arrayOrderByYear) => arrayOrderByYear.year)
-    .sort();
+function orderByYear(songs) {
+  const clonedSongs = [...songs];
 
-  return sortedYear.slice(0, 10);
+  // Ordenar las canciones por año y título
+  clonedSongs.sort((a, b) => {
+    if (a.year !== b.year) {
+      return a.year - b.year;
+    } else {
+      return a.title.localeCompare(b.title);
+    }
+  });
+
+  return clonedSongs;
   //Write your code here
 }
 
 //Exercise 5: Filter songs by genre
-function songsByGenre() {
+function songsByGenre(songs, genre) {
+  return songs.filter((song) => song.genre.includes(genre));
   //Write your code here
 }
 
 //Exercise 6: Modify the duration of songs to seconds
-function minutsToSeconds() {
+function minutsToSeconds(songs) {
+  if (!Array.isArray(songs)) {
+    throw new Error("La entrada debe ser un arreglo.");
+  }
+
+  const convertedSongs = songs.map((song) => {
+    const [minutes, seconds] = song.duration.split("min ");
+    const totalSeconds = parseInt(minutes) * 60 + parseInt(seconds);
+    return { ...song, duration: totalSeconds };
+  });
+
+  return convertedSongs;
+
   //Write your code here
 }
 
 //Exercise 7: Get the longest song
-function getLongestSong() {
-  //Write your code here
+function getLongestSong(array) {
+  const longestDurationSeconds = Math.max(
+    ...array.map((song) => {
+      const [min, sec] = song.duration.split("min ");
+      return parseInt(min, 10) * 60 + parseInt(sec, 10);
+    })
+  );
+  const longestSongs = array.filter((song) => {
+    const [min, sec] = song.duration.split("min ");
+    const totalSeconds = parseInt(min, 10) * 60 + parseInt(sec, 10);
+    return totalSeconds === longestDurationSeconds;
+  });
+  return longestSongs.map((song) => ({
+    ...song,
+    duration: longestDurationSeconds,
+  }));
 }
 
 //Exercise 8: Get the shortest song
